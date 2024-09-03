@@ -1,0 +1,42 @@
+package days02;
+
+import java.sql.Connection;
+import java.util.Scanner;
+
+import com.util.DBConn;
+
+public class Ex05 {
+	public static String [] menu = { "추가", "수정", "삭제", "조회", "검색", "종료" };
+	public static int selectedNumber ;
+	public static Connection conn;
+	public static Scanner scanner = new Scanner(System.in);
+	
+	public static void main(String[] args) {
+		//시작하자마자 디비 연결
+		conn = DBConn.getConnection();conn = DBConn.getConnection();
+		do {
+	         메뉴출력();
+	         메뉴선택();
+	         메뉴처리();         
+	      } while (true);
+		DBConn.close();
+	}
+
+	private static void 메뉴처리() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void 메뉴선택() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void 메뉴출력() {
+		System.out.printf("[메뉴]\n");
+	      for (int i = 0; i < menu.length; i++) {
+	         System.out.printf("%d. %s\n", i+1, menu[i]);
+	      }
+	}
+}
+	

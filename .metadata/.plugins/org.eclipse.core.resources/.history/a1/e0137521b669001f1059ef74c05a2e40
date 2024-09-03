@@ -1,0 +1,89 @@
+package days02;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.doit.domain.EmpVO;
+import org.doit.domain.SalgradeVO;
+
+import com.util.DBConn;
+
+public class Ex04 {
+
+	public static void main(String[] args) {
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT grade, s.losal, s.hisal "
+				+ ", COUNT(*) cnt "
+				+ "FROM salgrade  "
+				+ "JOIN emp e ON sal BETWEEN losal AND hisal "
+				+ "GROUP BY grade, s.losal, s.hisal, sal "
+				+ "ORDER BY grade ASC";
+
+		int grade;
+		int losal;
+		int hisal;
+		int cnt;
+
+		//			테이블 attribute에 따라 변수 다 줘
+
+		ArrayList<SalgradeVO> list = new ArrayList<>();
+		SalgradeVO vo = null;
+
+
+		try {
+			//			1+2작업 == com.util.DBConn.getConnection()으로 만들어둠!
+			conn = DBConn.getConnection();
+			//				3. 원하는 작업(CRUD)-statement 객체
+			stmt = conn.createStatement();
+			//				stmt.executeUpdate(sql); 영향 받은 record 갯수를 돌려줘서 return type이 int(insert, update, delete)
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				grade = rs.getInt("grade");
+				losal = rs.getInt("losal");
+				hisal = rs.getInt("hisal");
+				cnt = rs.getInt("cnt");
+
+				vo = new SalgradeVO().builder()
+		                   .grade(grade)
+		                   .losal(losal)
+		                   .hisal(hisal)
+		                   .cnt(cnt)
+		                   .build();
+
+				list.add(vo);
+
+			}//while
+			list.forEach(svo->{
+				System.out.printf("%d등급   ( %d~%d ) - %d명\n"
+						, svo.getGrade(), svo.getLosal()
+						, svo.getHisal(), svo.getCnt() );
+			});
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				//4. connection 객체 닫기 - close()
+				rs.close(); // 닫는 순서 중요
+				stmt.close();
+				//				conn.close();
+				DBConn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+
+
+			}
+		}
+	}//main
+}//class

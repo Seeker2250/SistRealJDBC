@@ -1,0 +1,14 @@
+package days01;
+
+public class days01 {
+//	JDBC CLASS 폴더 생성
+//	이클립스 실행 설정
+//	Java Project생성
+//	days01.Ex01.java
+	public static void main(String[] args) {
+		
+		System.out.println("되나");
+		
+		
+	}
+}

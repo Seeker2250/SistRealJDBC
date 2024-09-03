@@ -1,0 +1,9 @@
+package days02;
+
+/*emp와 dept와 salgrade를 join한 결과를 원해-> 전용 VO를 만들어(EmpDeptSalGradeVO라는 이름을 줄 거야)
+ * */
+public class Ex03 {
+	public static void main(String[] args) {
+		
+	}
+}

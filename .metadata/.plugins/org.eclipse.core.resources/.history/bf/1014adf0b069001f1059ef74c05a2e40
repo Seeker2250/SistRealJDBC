@@ -1,0 +1,84 @@
+package days02;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
+import org.doit.domain.EmpDeptSalgrade;
+import org.doit.domain.testVO;
+
+import com.util.DBConn;
+
+public class Ex04 {
+
+	public static void main(String[] args) {
+		
+
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT e.deptno, d.dname, e.empno, e.ename, "
+				+ "       sal + NVL(comm, 0) pay,\r\n"
+				+ "       CASE\r\n"
+				+ "           WHEN sal + NVL(comm, 0) BETWEEN 700 AND 1200 THEN 1\r\n"
+				+ "           WHEN sal + NVL(comm, 0) BETWEEN 1201 AND 1400 THEN 2\r\n"
+				+ "           WHEN sal + NVL(comm, 0) BETWEEN 1401 AND 2000 THEN 3\r\n"
+				+ "           WHEN sal + NVL(comm, 0) BETWEEN 2001 AND 3000 THEN 4\r\n"
+				+ "           ELSE 5\r\n"
+				+ "       END AS grade\r\n"
+				+ "FROM emp e "
+                + "JOIN dept d ON e.deptno = d.deptno "
+				+ "ORDER BY grade, pay";
+		int deptno;
+		String dname;
+		int empno;// 이게 제일 나을 듯(여러 메소드 지원)
+		String ename;
+		double pay;
+		//			테이블 attribute에 따라 변수 다 줘
+
+		
+		ArrayList<testVO> list = new ArrayList<>();
+		testVO vo = null;
+
+		try {
+			//			1+2작업 == com.util.DBConn.getConnection()으로 만들어둠!
+			conn = DBConn.getConnection();
+			//				3. 원하는 작업(CRUD)-statement 객체
+			stmt = conn.createStatement();
+			//				stmt.executeUpdate(sql); 영향 받은 record 갯수를 돌려줘서 return type이 int(insert, update, delete)
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				deptno = rs.getInt("deptno");
+				dname = rs.getString("ename");
+				empno = rs.getInt("empno");
+				ename = rs.getString("ename");
+				pay = rs.getInt("pay");
+
+				vo = new testVO(deptno, dname, empno, ename, pay);
+				list.add(vo);
+			}//while
+			list.forEach(evo->System.out.println(evo));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				//4. connection 객체 닫기 - close()
+				rs.close(); // 닫는 순서 중요
+				stmt.close();
+				//				conn.close();
+				DBConn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+
+
+			}
+		}
+	}//main
+		
+
+}//class

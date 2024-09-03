@@ -1,0 +1,136 @@
+package days02;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.doit.domain.EmpVO;
+import org.doit.domain.SalgradeVO;
+
+import com.util.DBConn;
+
+public class Ex04 {
+
+	public static void main(String[] args) {
+		Connection conn = null;
+		Statement stmt = null, stmt2 = null;
+		ResultSet rs = null, rs2 = null;
+		String sql = "SELECT grade, s.losal, s.hisal "
+				+ ", COUNT(*) cnt "
+				+ "FROM salgrade s "
+				+ "JOIN emp e ON sal BETWEEN losal AND hisal "
+				+ "GROUP BY grade, s.losal, s.hisal, sal "
+				+ "ORDER BY grade ASC";
+		
+		String sql2 = "SELECT d.deptno, dname, empno, ename, sal "
+				+ "FROM dept d RIGHT JOIN emp e ON d.deptno = e.deptno "
+				+ "            JOIN salgrade s ON sal BETWEEN losal AND hisal "
+				+ "WHERE grade = ";
+
+		int deptno;
+		String dname;
+		int empno;
+		String ename;
+		double sal;
+		
+		int grade;
+		int losal;
+		int hisal;
+		int cnt;
+
+		//			테이블 attribute에 따라 변수 다 줘
+
+		ArrayList<SalgradeVO> list = new ArrayList<>();
+		SalgradeVO vo = null;
+
+
+		try {
+			//			1+2작업 == com.util.DBConn.getConnection()으로 만들어둠!
+			conn = DBConn.getConnection();
+			//				3. 원하는 작업(CRUD)-statement 객체
+			stmt = conn.createStatement();
+			//				stmt.executeUpdate(sql); 영향 받은 record 갯수를 돌려줘서 return type이 int(insert, update, delete)
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {	
+				grade = rs.getInt("grade");
+				losal = rs.getInt("losal");
+				hisal = rs.getInt("hisal");
+				cnt = rs.getInt("cnt");
+
+				vo = new SalgradeVO().builder()
+		                   .grade(grade)
+		                   .losal(losal)
+		                   .hisal(hisal)
+		                   .cnt(cnt)
+		                   .build();
+
+//				list.add(vo);
+				/*
+				list.forEach(svo->{
+					System.out.printf("%d등급   ( %d~%d ) - %d명\n"
+							, svo.getGrade(), svo.getLosal()
+							, svo.getHisal(), svo.getCnt() );
+				});
+					*/
+				System.out.printf("%d등급   ( %d~%d ) - %d명\n"
+							, vo.getGrade(), vo.getLosal()
+							, vo.getHisal(), vo.getCnt() );
+			
+				//그 등급에 해당되는 사원 정보 출력 시작
+				
+				String sql3 = sql2 + vo.getGrade();
+				stmt2 = conn.createStatement();
+				rs2 = stmt2.executeQuery(sql3);
+				if(rs2.next()) {
+					do {
+						deptno =rs2.getInt("deptno");
+						dname = rs2.getString("dname");
+						empno = rs2.getInt("empno");
+						ename = rs2.getString("ename");
+						sal = rs2.getDouble("sal");
+						
+						System.out.printf("\t%d\t%s\t%d\t%s\t%.2f\n", deptno, dname, empno, ename, sal);
+					}
+					while (rs2.next());
+				}else {
+					System.out.println("해당 등급의 사원은 존재하지 않아요");
+				}
+				//그 등급에 해당되는 사원 정보 출력 종료
+				rs2.close();
+				stmt2.close();
+				
+			}//while
+			
+			
+//			list.forEach(svo->{
+//				System.out.printf("%d등급   ( %d~%d ) - %d명\n"
+//						, svo.getGrade(), svo.getLosal()
+//						, svo.getHisal(), svo.getCnt() );
+//			});
+			
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				//4. connection 객체 닫기 - close()
+				rs.close(); // 닫는 순서 중요
+				stmt.close();
+				//				conn.close();
+				DBConn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+
+
+			}
+		}
+	}//main
+}//class

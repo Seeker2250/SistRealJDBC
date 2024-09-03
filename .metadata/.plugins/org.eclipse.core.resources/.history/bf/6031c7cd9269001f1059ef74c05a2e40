@@ -1,0 +1,64 @@
+package com.util;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+// Singleton으로 DB연결해주는 객체 생성
+public class DBConn {
+	private static Connection conn = null;
+	private DBConn() {}
+
+	public static Connection getConnection() {
+		if(conn == null) {
+			//conn이 null이라면 없다는 뜻이니까 생성
+			String className = "oracle.jdbc.driver.OracleDriver";//OracleDriver라고 치고 나오는 import문 복사 붙여넣기
+			String url = "jdbc:oracle:thin:@localhost:1521:xe";
+			String user = "scott";
+			String password = "tiger";
+
+			try {
+				Class.forName(className);
+				conn = DriverManager.getConnection(url, user, password);
+				//				2. connection 객체 얻어와 (DriverManager)
+
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//				3. 원하는 작업(CRUD)-statement 객체
+		}return conn;//만들어져 있다면 그냥 그대로 return
+
+
+		public static Connection getConnection(String url, String user, String password) {
+			if(conn == null) {
+				//conn이 null이라면 없다는 뜻이니까 생성
+				String className = "oracle.jdbc.driver.OracleDriver";//OracleDriver라고 치고 나오는 import문 복사 붙여넣기
+				try {
+					Class.forName(className);
+					conn = DriverManager.getConnection(url, user, password);
+					//					2. connection 객체 얻어와 (DriverManager)
+
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//				3. 원하는 작업(CRUD)-statement 객체
+			}//if
+			return conn;//만들어져 있다면 그냥 그대로 return
+		}//getConnection
+
+		public static void close() {
+			try {
+				if(conn != null && !conn.isClosed())//사용되고 있다면 닫아
+					conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+			conn=null;
+		}
+	}//class
