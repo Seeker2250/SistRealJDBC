@@ -20,5 +20,6 @@ public class DeptVO {
 	private int deptno;
 	private String dname;
 	private String loc;
+	private int cnt;//그 부서에 속한 사원 수
 
 }//class

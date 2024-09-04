@@ -1,0 +1,44 @@
+package days03;
+
+import java.sql.SQLException;
+
+public class Ex07_03 {
+	public static void main(String[] args) {
+		
+//		UP_INSERTDEPT
+//		새로운 부서 추가
+		System.out.println("부서번호, 부서명, 지역명 입력해봐");
+
+		int deptno = scanner.nextInt();
+		String dname = scanner.next();
+		String loc = scanner.next();
+
+
+		String sql = "INSERT INTO dept ( deptno, dname, loc ) "
+				+ "VALUES (?, ?, ?)";
+
+
+		//		System.out.println(sql);
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, deptno);
+			pstmt.setString(2, dname);
+			pstmt.setString(3, loc);
+			int rowCount = pstmt.executeUpdate();//영향 받은 record 수를 return
+			if(rowCount == 1) {
+				System.out.println("부서 추가 성공!!");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+}

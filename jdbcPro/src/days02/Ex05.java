@@ -80,69 +80,69 @@ public class Ex05 {
 	}
 
 	private static void 부서검색() {
-		// 검색 조건 입력 1'b'(부서 번호)/2'n'(부서명)/3 'l'(지역명)
+		// 검색조건 입력 ?  1'b'(부서번호)/2'n'(부서명)/3 'l'(지역명)   "nl"
 		// 검색어 입력
-		String searchCondition = scanner.nextLine(); //검색조건
-		String searchWord = scanner.nextLine();//검색어
+		String searchCondition; // 검색 조건
+		String searchWord;  // 검색어
 		
-//		부서 조회에 있는 모든 코딩 복사 붙여넣기
+		System.out.print("> 검색조건, 검색어 입력하세요 ? ");
+		searchCondition = scanner.nextLine();
+		searchWord = scanner.nextLine();
+		
+		// 부서조회() 모든 코딩 복사 + 붙이기
 		ArrayList<DeptVO> list = null;
 		ResultSet rs = null;
 		Statement stmt = null;
-
-		String sql = " SELECT * "
-				+ " FROM dept "
-				+ " WHERE ";
+		
+		String sql = "SELECT * "
+				+ "FROM dept "
+				+ "WHERE ";
+		
 		int deptno;
 		String dname, loc;
-
+		
 		DeptVO vo = null;
 		
-		//실행 전에 확인
+		// 
 		if (searchCondition.equals("b")) {        // 부서번호 검색
-	         sql += " deptno = "+ searchWord;         
-	      } else if (searchCondition.equals("n")) { // 부서명 검색
-	         sql += " REGEXP_LIKE ( dname, '"+searchWord+"', 'i') " ;
-	      } else if ( searchCondition.equals("l")) { // 지역명 검색
-	         sql += " REGEXP_LIKE ( loc, '"+searchWord+"', 'i') " ;
-	      } else if ( searchCondition.equals("nl")) { // 부서명 또는 지역명 검색
-	         sql += " REGEXP_LIKE ( dname, '"+searchWord+"', 'i') OR REGEXP_LIKE ( loc, '"+searchWord+"', 'i') " ;
-	      }
-		System.out.println(sql);
+			sql += " deptno = "+ searchWord;			
+		} else if (searchCondition.equals("n")) { // 부서명 검색
+			sql += " REGEXP_LIKE ( dname, '"+searchWord+"', 'i') " ;
+		} else if ( searchCondition.equals("l")) { // 지역명 검색
+			sql += " REGEXP_LIKE ( loc, '"+searchWord+"', 'i') " ;
+		} else if ( searchCondition.equals("nl")) { // 부서명 또는 지역명 검색
+			sql += " REGEXP_LIKE ( dname, '"+searchWord+"', 'i') OR REGEXP_LIKE ( loc, '"+searchWord+"', 'i') " ;
+		} 
+		
+		System.out.println( sql );
+		
 		try {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
-
-			if(rs.next()) {
+			
+			if (rs.next()) {
 				list = new ArrayList<DeptVO>();
 				do {
 					deptno = rs.getInt("deptno");
 					dname = rs.getString("dname");
 					loc = rs.getString("loc");
-
-					vo = new DeptVO(deptno, dname, loc);
+					vo = new DeptVO(deptno, dname, loc, 0);
 					list.add(vo);
 				} while (rs.next());
-			}//if
-
-			//		부서정보 출력
+				
+			} // if
+			
 			부서출력(list);
-		}
-
-		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
+		} catch (SQLException e) { 
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				rs.close();
 				stmt.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-		}
-		
-	}
+		}}}
 
 	private static void 부서조회() {
 		ArrayList<DeptVO> list = null;

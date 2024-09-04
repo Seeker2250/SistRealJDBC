@@ -1,0 +1,32 @@
+package days03;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.util.DBConn;
+
+public class Ex07_04 {
+	public static void main(String[] args) {
+//		UP_UPDATEDEPT
+		Connection conn = DBConn.getConnection();
+		CallableStatement cstmt = null;
+		int rowCount = 0;
+		
+		String sql = "{CALL UP_UPDATEDEPT(?)}"; 
+		try {
+			cstmt = conn.prepareCall(sql);
+			rowCount = cstmt.executeUpdate(); // DML문 
+	         
+	         if (rowCount == 1) {
+	            System.out.println("부서 수정 성공!!");
+	         } else {
+	            System.out.println("부서 수정 실패!!");
+	         }  
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		DBConn.close();
+	}
+}

@@ -1,0 +1,42 @@
+package days03;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.util.DBConn;
+
+public class Ex07_04 {
+	public static void main(String[] args) {
+		//		UP_UPDATEDEPT
+		Connection conn = DBConn.getConnection();
+		CallableStatement cstmt = null;
+		int rowCount = 0;
+		String sql = "{CALL UP_UPDATEDEPT(?)}"; 
+		try {
+			cstmt = conn.prepareCall(sql);
+
+			// 프로시저의 입력 파라미터 바인딩 (예: 10번 부서 수정)
+			int deptno = 10;  // 이 값을 사용자가 동적으로 입력할 수도 있음
+			cstmt.setInt(1, deptno);  // 첫 번째 파라미터 바인딩
+
+			int pdeptno = 50;
+			rowCount = cstmt.executeUpdate();  // DML문 실행
+
+			if (rowCount == 1) {
+				System.out.println("부서 수정 성공!!");
+			} else {
+				System.out.println("부서 수정 실패!!");
+			}  
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (cstmt != null) cstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			DBConn.close();  // DB 연결 닫기
+		}
+	}
+}

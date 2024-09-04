@@ -1,0 +1,112 @@
+package days03;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import com.util.DBConn;
+
+//Reflection Java에서는 object에 대한 정보를 추출해서 사용하는 기술
+
+/* JDBC에서의 Reflection
+ * 결과(ResultSet)에 대한 정보를 추출해서 사용하는 기술
+ * 예시 ) Scott이 소유하고 있는 모든 테이블 목록을 출력(조회)
+ * 		 Scott이 소유한 테이블 명을 선택(입력), 선택된 테이블 정보를 조회(출력)
+ * 
+ * */
+public class Ex03 {
+	public static void main(String[] args) {
+		String sql = "select table_name from tabs";
+		Connection conn =null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<String> tnList = new ArrayList<String>(); //테이블 목록 용   
+		String tableName = null;
+
+		//연결
+		conn = DBConn.getConnection();
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				tableName = rs.getString("table_name");
+				tnList.add(tableName);
+
+			}
+			System.out.println(tnList.toString());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				rs.close();
+				pstmt.close();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		}
+
+		Scanner sc = new Scanner(System.in);
+		System.out.println("테이블명 입력해");
+		tableName = sc.next();
+		sql = "SELECT * FROM " + tableName;
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			//			rs.getMetaData() : rs결과 객체로부터 컬럼 수, 컬럼 타입, 컬럼 속성
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnCount = rsmd.getColumnCount();
+			System.out.println(" The number of columns : "+columnCount);
+			System.out.println("-".repeat(columnCount * 7));
+//			for (int i = 0; i < columnCount; i++) {
+//				String columnName = rsmd.getColumnName(i+1);
+//
+//				int columnType = rsmd.getColumnType(i+1);
+//				String columnTypename = rsmd.getColumnTypeName(i+1);
+//
+//
+//				int p = rsmd.getPrecision(i+1);
+//				int s = rsmd.getScale(i + 1);
+//
+//				if(columnType == 2) {
+//					System.out.printf("%s\t%d\t%s(%d, %d)\n",columnName, columnType, columnTypename, p, s);
+//				} else if(columnType == 12) {
+//					System.out.printf("%s\t%d\t%s(%d)\n",columnName, columnType, columnTypename, p);
+//				}
+//				else {
+//					System.out.printf("%s\t%d\t%s\n",columnName, columnType, columnTypename);
+//				}
+//			}//for
+			
+			for (int i = 1; i <= columnCount; i++) {
+				String columnName = rsmd.getColumnName(i);
+				System.out.printf("%s\t", columnName);
+			}//out of real for
+			System.out.println();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				rs.close();
+				pstmt.close();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		}
+
+
+		DBConn.close();
+
+	}
+}

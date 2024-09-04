@@ -1,0 +1,87 @@
+package days03;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
+import org.doit.domain.DeptVO;
+import org.doit.domain.EmpVO;
+
+import com.util.DBConn;
+
+public class Ex04 {
+//    [실행결과]
+//ACCOUNTING(3)
+//empno ename hiredate pay
+//empno ename hiredate pay
+//empno ename hiredate pay
+//RESEARCH(3)
+//empno ename hiredate pay
+//empno ename hiredate pay
+//empno ename hiredate pay
+//SALES(6)
+//empno ename hiredate pay
+//empno ename hiredate pay
+//empno ename hiredate pay
+//empno ename hiredate pay
+//empno ename hiredate pay
+//empno ename hiredate pay
+//OPERATIONS(1)
+//empno ename hiredate pay 
+//NULL - 1명
+//empno ename hiredate pay
+	public static void main(String[] args) {
+//		String sql = " SELECT dname, empno, ename, hiredate, sal+NVL(comm, 0) pay "
+//				+ " FROM emp e "
+//				+ " LEFT JOIN dept d ON e.deptno = d.deptno ";
+		String deptSql = " SELECT dname, COUNT (empno) cnt, d.deptno "
+				+ " FROM dept d FULL OUTER JOIN emp e ON e.deptno = d.deptno "
+				+ " GROUP BY dname, d.deptno "
+				+ " ORDER BY dname";	
+		String empSql= " SELECT empno, ename, hiredate, sal+NVL(comm, 0) pay "
+				+ " FROM emp "
+				+ " WHERE deptno = ? "; //deptno IS NULL 체크
+		Connection conn = DBConn.getConnection();
+		PreparedStatement deptPstmt = null;
+		PreparedStatement empPstmt = null;
+		ResultSet empRs = null;
+		ResultSet deptRs = null;
+		DeptVO dvo = null;
+		EmpVO evo = null;
+		ArrayList<EmpVO> empList = null;
+		LinkedHashMap<DeptVO, ArrayList<EmpVO>> lhMap = new LinkedHashMap<>();
+		int deptno, cnt;
+		String dname;
+		try {
+			
+			deptPstmt = conn.prepareStatement(deptSql);
+			deptRs = deptPstmt.executeQuery();
+
+			while(deptRs.next()) {
+				deptno = deptRs.getInt("deptno");
+				dname = deptRs.getString("dname");
+				cnt = deptRs.getInt("cnt");
+				
+				dvo = new DeptVO(deptno, dname, null, cnt);
+				System.out.printf("%s(%d명)\n", dvo.getDname(), dvo.getCnt());
+				
+				
+			}//while
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				deptRs.close();
+				deptPstmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		DBConn.close();
+	}
+}

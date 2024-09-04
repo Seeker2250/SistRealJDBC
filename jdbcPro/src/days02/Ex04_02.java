@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.doit.domain.EmpDeptSalgrade;
 import org.doit.domain.EmpDeptSalgradeVO;
 import org.doit.domain.SalgradeVO;
 
@@ -33,10 +34,10 @@ public class Ex04_02 {
       PreparedStatement pstmt = null, empPstmt = null;
       ResultSet rs = null, empRs = null;
       SalgradeVO vo = null;                         // key
-      ArrayList<EmpDeptSalgradeVO> empList = null;  // value      
-      EmpDeptSalgradeVO empVo = null;
+      ArrayList<EmpDeptSalgrade> empList = null;  // value      
+      EmpDeptSalgrade empVo = null;
 
-      LinkedHashMap<SalgradeVO, ArrayList<EmpDeptSalgradeVO>> map = new LinkedHashMap<SalgradeVO, ArrayList<EmpDeptSalgradeVO>>();
+      LinkedHashMap<SalgradeVO, ArrayList<EmpDeptSalgrade>> map = new LinkedHashMap<SalgradeVO, ArrayList<EmpDeptSalgradeVO>>();
 
       conn = DBConn.getConnection();
 
