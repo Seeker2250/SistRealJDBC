@@ -1,0 +1,16 @@
+package days04;
+
+//jdbc 게시판 구현 : 모델2 방식
+
+public class Ex01 {
+
+	public static void main(String[] args) {
+/*	패키지 선언
+ * days04.board
+ * days04.board.controller
+ * days04.board.service
+ * days04.board.persistence
+ * days04.board.domain
+ * */		
+	}
+}

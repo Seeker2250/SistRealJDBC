@@ -167,7 +167,7 @@ public class Ex05 {
 					dname = rs.getString("dname");
 					loc = rs.getString("loc");
 
-					vo = new DeptVO(deptno, dname, loc);
+					vo = new DeptVO(deptno, dname, loc, 0);
 					list.add(vo);
 				} while (rs.next());
 			}//if

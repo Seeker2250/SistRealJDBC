@@ -1,0 +1,34 @@
+package days04.board.test;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.Test;
+
+import com.util.DBConn;
+
+import days04.board.domain.BoardDTO;
+import days04.board.persistence.BoardDAO;
+import days04.board.persistence.BoardDAOImpl;
+
+class BoardDAOImplTest {
+
+	BoardDAO dao = null;
+	Connection conn = null;
+	BoardDAOImplTest(){
+		this.conn = DBConn.getConnection();
+		this.dao = new BoardDAOImpl(this.conn);
+		
+	}
+	@Test 
+	void testSelect() {
+		try {
+			ArrayList<BoardDTO> list = this.dao.select();
+			list.forEach(dto->{System.out.println(dto);});
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

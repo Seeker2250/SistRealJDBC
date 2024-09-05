@@ -1,0 +1,21 @@
+package days04.board.persistence;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import days04.board.domain.BoardDTO;
+
+public interface BoardDAO {
+	
+//	1) 페이징 처리가 되지 않은 게시글 목록 가져와(abstract method)
+	ArrayList<BoardDTO> select() throws SQLException;
+//	암것도 없어도 public abstract, interface니까
+	
+//	1-2) 페이징 처리가 된 게시글 목록 가져와
+	ArrayList<BoardDTO> select(int currentPage, int numberPerPage) throws SQLException;
+	
+//	총 레코드 수
+	int getTotalRecords() throws SQLException;
+// 총 페이지 수
+	int getTotalPages() throws SQLException;
+}

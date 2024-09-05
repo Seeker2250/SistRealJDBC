@@ -1,0 +1,33 @@
+package days04.board.controller;
+
+public class BoardController {
+	
+	/*
+	테이블, 시퀀스 생성
+	데이터 계층별로 넘겨줄 때 : DTO
+	
+	DAO interface 만들어
+	조회용 select
+	ArrayList<BoardDTO> select() throws SQLException
+	
+	BoardDAOImpl 구현 클래스
+	
+	
+	ArrayList<BoardDTO> selectService()가져와서
+	return this dao.select()
+	이런저런 작업
+	
+	->트랜잭션으로 묶어서 커밋 or 롤백
+	*/
+	
+}
+/* Class.forName();
+ * Connnection conn = DriverManager.getConnection(url, user, password);
+ * Connection conn = DBConn.getConnection();
+ * 
+ * CRUD
+ * RUD  ->  rowNum = executeUpdate()
+ * C    ->  executeQuery()
+ * 
+ * */
+ */

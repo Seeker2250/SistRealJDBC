@@ -62,7 +62,7 @@ public class Ex02 {
 					dname = rs.getString("dname");
 					loc = rs.getString("loc");
 
-					dvo = new DeptVO(deptno, dname, loc);
+					dvo = new DeptVO(deptno, dname, loc, 0);
 					//dvo = new DeptVO();
 					//dvo.setDeptno(deptno);
 					//dvo.setDeptno(dname);

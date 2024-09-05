@@ -1,0 +1,14 @@
+package days04;
+
+public class Ex02 {
+	public static void main(String[] args) {
+		
+		int totalRecord = 136;//총 레코드 수가 136이라 가정
+		int currentPage = 1;
+		int numberPerPage = 10;
+//		BETWEEN start AND end;
+		int totalPages = (int)Math.ceil((double)(totalRecord / numberPerPage));
+		System.out.println(totalPages);
+		
+	}
+}

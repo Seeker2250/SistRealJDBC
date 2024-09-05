@@ -1,0 +1,50 @@
+package days04;
+
+import java.sql.Connection;
+
+import com.util.DBConn;
+
+import days04.board.controller.BoardController;
+import days04.board.persistence.BoardDAO;
+import days04.board.persistence.BoardDAOImpl;
+import days04.board.service.BoardService;
+
+//jdbc 게시판 구현 : 모델2 방식
+
+public class Ex01 {
+
+	public static void main(String[] args) {
+		
+		Connection conn = DBConn.getConnection();
+		BoardDAO dao = new BoardDAOImpl(conn);
+		BoardService service = new BoardService(dao);
+		BoardController controller = new BoardController(service);
+		controller.boardStart();
+/*	패키지 선언
+ * days04.board
+ * days04.board.controller - 총괄
+ * days04.board.service - : model
+ * days04.board.persistence - DAO(Access, DB연동처리만 하는 Class) : model
+ * days04.board.domain - DTO(Transfer), VO(어떤 값을 가지는 객체) 사실 둘이 비슷해
+ * 
+ * 
+ * Table TBL_CSTVSBOARD이(가) 생성되었습니다.
+ * create table tbl_cstVSBoard (
+  seq number not null primary key, 
+  writer varchar2(20) not null,
+  pwd varchar2(20) not null,
+  email varchar2(100), 
+  title varchar2(200) not null, 
+  writedate date default sysdate,  
+  readed number default 0, 
+  tag number(1) default 0 ,
+  content CLOB  -- 글 내용
+  
+  
+  Sequence SEQ_TBL_CSTVSBOARD이(가) 생성되었습니다.
+  CREATE SEQUENCE seq_tbl_cstVSBoard
+NOCACHE;
+);
+ * */		
+	}
+}

@@ -1,0 +1,37 @@
+package days04.board.test;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.Test;
+
+import com.util.DBConn;
+
+import days04.board.domain.BoardDTO;
+import days04.board.persistence.BoardDAO;
+import days04.board.persistence.BoardDAOImpl;
+import days04.board.service.BoardService;
+
+class BoardServiceTest {
+
+	BoardDAO dao = null;
+	Connection conn = null;
+	BoardService service = null;
+	BoardServiceTest(){
+		this.conn = DBConn.getConnection();
+		this.dao = new BoardDAOImpl(this.conn);
+		this.service = new BoardService(this.dao);
+
+	}
+	   @Test
+	   void testSelect() {
+
+	      ArrayList<BoardDTO> list = this.service.selectService();
+		 list.forEach(dto->{
+		    System.out.println(dto);
+		 });      
+
+	   }
+
+	}

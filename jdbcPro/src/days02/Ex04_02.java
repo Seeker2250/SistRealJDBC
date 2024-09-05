@@ -37,7 +37,7 @@ public class Ex04_02 {
       ArrayList<EmpDeptSalgrade> empList = null;  // value      
       EmpDeptSalgrade empVo = null;
 
-      LinkedHashMap<SalgradeVO, ArrayList<EmpDeptSalgrade>> map = new LinkedHashMap<SalgradeVO, ArrayList<EmpDeptSalgradeVO>>();
+      LinkedHashMap<SalgradeVO, ArrayList<EmpDeptSalgrade>> map = new LinkedHashMap<SalgradeVO, ArrayList<EmpDeptSalgrade>>();
 
       conn = DBConn.getConnection();
 
@@ -59,10 +59,10 @@ public class Ex04_02 {
                empRs = empPstmt.executeQuery();
 
                if (empRs.next()) {
-                  empList = new ArrayList<EmpDeptSalgradeVO>();
+                  empList = new ArrayList<EmpDeptSalgrade>();
                   do {
                      //d.deptno, dname, empno, ename, sal
-                     empVo = EmpDeptSalgradeVO
+                     empVo = EmpDeptSalgrade
                            .builder()
                            .empno(empRs.getInt("empno"))
                            .dname(empRs.getString("dname"))
@@ -101,14 +101,14 @@ public class Ex04_02 {
    } // main
 
    private static void dispSalgrade(
-         LinkedHashMap<SalgradeVO, ArrayList<EmpDeptSalgradeVO>> map) {
-      Set<Entry<SalgradeVO, ArrayList<EmpDeptSalgradeVO>>> set = map.entrySet();
-      Iterator<Entry<SalgradeVO, ArrayList<EmpDeptSalgradeVO>>> ir = set.iterator();
+         LinkedHashMap<SalgradeVO, ArrayList<EmpDeptSalgrade>> map) {
+      Set<Entry<SalgradeVO, ArrayList<EmpDeptSalgrade>>> set = map.entrySet();
+      Iterator<Entry<SalgradeVO, ArrayList<EmpDeptSalgrade>>> ir = set.iterator();
       while (ir.hasNext()) {
-         Entry<SalgradeVO, ArrayList<EmpDeptSalgradeVO>> entry = 
+         Entry<SalgradeVO, ArrayList<EmpDeptSalgrade>> entry = 
                ir.next();
          SalgradeVO vo =  entry.getKey();
-         ArrayList<EmpDeptSalgradeVO> list = entry.getValue();
+         ArrayList<EmpDeptSalgrade> list = entry.getValue();
          // 출력
          System.out.printf("%d등급   ( %d~%d ) - %d명\n"
                , vo.getGrade()
@@ -116,9 +116,9 @@ public class Ex04_02 {
                , vo.getHisal()
                , vo.getCnt());
          // 사원 출력
-         Iterator<EmpDeptSalgradeVO> ir2 = list.iterator();
+         Iterator<EmpDeptSalgrade> ir2 = list.iterator();
          while (ir2.hasNext()) {
-            EmpDeptSalgradeVO empvo = ir2.next();
+            EmpDeptSalgrade empvo = ir2.next();
             System.out.printf(
                   "\t\t%s\t%d\t%s\t%.2f\n"
                   , empvo.getDname()
@@ -129,7 +129,8 @@ public class Ex04_02 {
       } // while
    }
 
-   private static void dispSalgrade(ArrayList<SalgradeVO> list) {
+   @SuppressWarnings("unused")
+private static void dispSalgrade(ArrayList<SalgradeVO> list) {
       Iterator<SalgradeVO> ir = list.iterator();
       while (ir.hasNext()) {
          SalgradeVO vo = ir.next();
