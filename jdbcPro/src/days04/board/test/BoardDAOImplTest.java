@@ -19,12 +19,12 @@ class BoardDAOImplTest {
 	BoardDAOImplTest(){
 		this.conn = DBConn.getConnection();
 		this.dao = new BoardDAOImpl(this.conn);
-		
+
 	}
 	@Test 
 	void testSelect() {
 		try {
-//			ArrayList<BoardDTO> list = this.dao.select();
+			//			ArrayList<BoardDTO> list = this.dao.select();
 			ArrayList<BoardDTO> list = this.dao.select(2,10);
 			list.forEach(dto->{System.out.println(dto);});
 		} catch (SQLException e) {
@@ -34,7 +34,7 @@ class BoardDAOImplTest {
 	}
 	@Test 
 	void testInsert() {//새 글 쓰기
-//		writer, pwd, email, title, tag, content 받아와야해
+		//		writer, pwd, email, title, tag, content 받아와야해
 		BoardDTO dto = new BoardDTO().builder()
 				.writer("홍길동")
 				.pwd("1234")
@@ -51,6 +51,27 @@ class BoardDAOImplTest {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	void searchTest(){
+		try {
+			ArrayList<BoardDTO> list = this.dao.search("w", "홍길동");
+			list.forEach(dto->{System.out.println(dto);});
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+	}
+	
+	void testSearch(){
+		try {
+			ArrayList<BoardDTO> list = this.dao.search("w", "홍길동1", 2, 5);
+			list.forEach(dto->{System.out.println(dto);});
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
 		}
 	}
 }

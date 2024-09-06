@@ -321,5 +321,215 @@ public class BoardDAOImpl implements BoardDAO{
 		return rowCount;
 	}
 	
+	
+	@Override
+	public ArrayList<BoardDTO> search(String searchCondition, String searchWord){
+		long seq;
+		String writer, email, title;
+		int readed;
+		Date writedate;
+
+		ArrayList<BoardDTO> list = null;
+		String sql = " SELECT seq, writer, email, title, readed, writedate "
+				+ " FROM tbl_cstVSBoarD ";
+//				검색 조건에 맞는 WHERE절 시작
+				switch(searchCondition) {
+				case "t"://제목
+					sql += "WHERE REGEXP_LIKE(title, ?, 'i') ";
+					break;
+				case "w"://작성자
+				sql += "WHERE REGEXP_LIKE(writer, ?, 'i') ";
+				break;
+				case "c"://
+				sql += "WHERE REGEXP_LIKE(content, ?, 'i') ";
+				break;
+				case "tc":
+				sql += "WHERE REGEXP_LIKE(title, ?, 'i') OR WHERE REGEXP_LIKE(content, ?, 'i') ";
+				break;
+				}
+					
+					
+//				검색 조건에 맞는 WHERE절 끝
+				sql += " ORDER BY seq DESC ";
+		//		부서조회 시작
+
+
+
+
+		BoardDTO dto = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, searchWord);
+				if(searchWord.equals("tc")) {
+				pstmt.setString(2, searchWord);
+				}
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				list = new ArrayList<BoardDTO>();
+				do {
+					seq = rs.getLong("seq");
+					writer = rs.getString("writer");
+					email = rs.getString("email");
+					title = rs.getString("title");
+					readed = rs.getInt("readed");
+					writedate = rs.getDate("writedate");
+
+					//					dto = new BoardDTO(seq, writer, null, email, title, writedate, readed,  0, null);
+					dto = new BoardDTO().builder()
+							.seq(seq)
+							.writer(writer)
+							.email(email)
+							.title(title)
+							.writedate(writedate)
+							.readed(readed)
+							.build();
+					list.add(dto);
+				} while (rs.next());
+			}//if
+			//		부서정보 출력
+		}
+
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				rs.close();
+				pstmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//		부서조회 끝
+		return list;
+	}
+	
+	///////
+	public ArrayList<BoardDTO> search(String searchCondition, String searchWord, int currentPage, int numberPerpage){
+	long seq;
+	String writer, email, title;
+	int readed;
+	Date writedate;
+
+	ArrayList<BoardDTO> list = null;
+	String sql = "SELECT * "
+			+ "FROM ( "
+			+ "    SELECT ROWNUM no, t.* "
+			+ "    FROM( "
+			+ "        SELECT seq, writer, email, title, readed, writedate "
+			+ "        FROM tbl_cstVSBoard ";
+			switch(searchCondition) {
+			case "t"://제목
+				sql += "WHERE REGEXP_LIKE(title, ?, 'i') ";
+				break;
+			case "w"://작성자
+			sql += "WHERE REGEXP_LIKE(writer, ?, 'i') ";
+			break;
+			case "c"://
+			sql += "WHERE REGEXP_LIKE(content, ?, 'i') ";
+			break;
+			case "tc":
+			sql += "WHERE REGEXP_LIKE(title, ?, 'i') OR WHERE REGEXP_LIKE(content, ?, 'i') ";
+			break;
+			}
+			
+			
+			
+			sql+= "        ORDER BY seq DESC "
+			+ "    ) t "
+			+ ")b "
+			+ "WHERE no BETWEEN ? AND ?";
+	//		부서조회 시작
+
+
+	BoardDTO dto = null;
+
+	int start = (currentPage-1)*numberPerpage+1;
+	int end = start+numberPerpage-1;;
+	int totalRecords;
+	try {
+		totalRecords = getTotalRecords();
+		if(end > totalRecords) {
+			end = totalRecords;}//if
+	} catch (SQLException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	
+
+	try {
+		pstmt = conn.prepareStatement(sql);
+		
+
+		pstmt.setString(1, searchWord);
+			if(searchWord.equals("tc")) {
+				
+			pstmt.setString(2, searchWord);
+			pstmt.setInt(3, start);
+			pstmt.setInt(4, end);
+			
+			}else {
+				pstmt.setInt(2, start);
+				pstmt.setInt(3, end);	
+			}
+		
+		System.out.println(sql);
+		
+
+		rs = pstmt.executeQuery();
+		if(rs.next()) {
+			list = new ArrayList<BoardDTO>();
+			do {
+				seq = rs.getLong("seq");
+				writer = rs.getString("writer");
+				email = rs.getString("email");
+				title = rs.getString("title");
+				readed = rs.getInt("readed");
+				writedate = rs.getDate("writedate");
+
+				//					dto = new BoardDTO(seq, writer, null, email, title, writedate, readed,  0, null);
+				dto = new BoardDTO().builder()
+						.seq(seq)
+						.writer(writer)
+						.email(email)
+						.title(title)
+						.writedate(writedate)
+						.readed(readed)
+						.build();
+				list.add(dto);
+			} while (rs.next());
+		}//if
+
+		//		부서정보 출력
+
+	}
+
+	catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}finally {
+		try {
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	//		부서조회 끝
+
+
+
+	return list;
+
+	
+	}
 
 }
+
+
+
+
+

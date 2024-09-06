@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="BoardDAOImplTest" project="jdbcPro" tests="1" started="1" failures="0" errors="0" ignored="0">
-  <testsuite name="days04.board.test.BoardDAOImplTest" time="0.049" displayname="BoardDAOImplTest" uniqueid="[engine:junit-jupiter]/[class:days04.board.test.BoardDAOImplTest]">
-    <testcase name="testSelect" classname="days04.board.test.BoardDAOImplTest" time="0.049" displayname="testSelect()" uniqueid="[engine:junit-jupiter]/[class:days04.board.test.BoardDAOImplTest]/[method:testSelect()]"/>
-  </testsuite>
-</testrun>

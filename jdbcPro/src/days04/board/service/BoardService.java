@@ -126,8 +126,50 @@ public class BoardService {
 		}
 
 		return rowCount;
-		
+
 	}
 
-}
+// 6. 게시글 검색 서비스
+	public ArrayList<BoardDTO> searchService(String searchCondition, String searchWord, int currentPage, int numberPerpage) {
+
+		ArrayList<BoardDTO> list = null;
+		//	1. 실제 DB를 연동해서 ArrayList라는 list 가져와서 return
+		try { 	
+
+
+			((BoardDAOImpl)this.dao).getConn().setAutoCommit(false);
+			list = this.dao.search(searchCondition, searchWord, currentPage, numberPerpage);
+
+
+			//	2. 누가 가져왔는지 로그 기록 작업
+			System.out.println("2. 게시글 검색 : 로그 기록 작업");
+
+
+			//	3. 다른 작업들 추후에 할 수 있기 때문에 (문자/이메일 전송 등) 
+			//	디비 연동 안됐는데 나머지가 되면 안되잖아->트랜잭션
+			System.out.println("3. 게시글 검색 : 문자/메일 전송 작업...");
+			((BoardDAOImpl)this.dao).getConn().commit();
+
+		} catch (SQLException e) {
+			try {
+				((BoardDAOImpl)this.dao).getConn().rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				((BoardDAOImpl)this.dao).getConn().setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+
+
+		return list;
+
+	}
+
+}//class
 
