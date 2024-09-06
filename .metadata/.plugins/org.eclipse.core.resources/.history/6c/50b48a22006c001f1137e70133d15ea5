@@ -32,6 +32,4 @@ public interface BoardDAO {
 	ArrayList<BoardDTO> search(String searchCondition, String searchWord) throws SQLException;
 //	6-2) 페이징처리 된 게시글 검색
 	ArrayList<BoardDTO> search(String searchCondition, String searchWord, int currentPage, int numberPerpage) throws SQLException;
-//	검색할 때 총 페이지 수 반환
-	int getTotalPages(int numberPerpage, String searchCondition, String searchWord) throws SQLException;
 }//interface

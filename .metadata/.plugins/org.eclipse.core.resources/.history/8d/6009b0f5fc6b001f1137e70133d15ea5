@@ -129,7 +129,7 @@ public class BoardController {
 		System.out.printf("%s\t%-40s\t%s\t%-10s\t%s\n", 
 				"글번호","글제목","글쓴이","작성일","조회수");
 		System.out.println("-------------------------------------------------------------------------");
-		
+		int asdf = 0;
 		if (list == null) {
 			System.out.println("\t\t> 게시글 존재 X");   
 		} else {
@@ -142,12 +142,14 @@ public class BoardController {
 						dto.getWriter(),
 						dto.getWritedate(),
 						dto.getReaded());   
+						asdf++;
 			} // while
 		}
 
 		System.out.println("-------------------------------------------------------------------------");      
 //		System.out.println("\t\t[1] 2 3 4 5 6 7 8 9 10 NEXT");
-		PagingVO paging = new PagingVO(currentPage, numberPerpage, numberOfPageBlock, searchCondition, searchWord);
+		
+		PagingVO paging = new PagingVO(currentPage, numberPerpage, asdf/numberPerpage);
 		
 	      System.out.print("\t\t");
 	      if( paging.prev ) System.out.printf(" %s ", "<");
